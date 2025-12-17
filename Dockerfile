@@ -22,5 +22,9 @@ RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
 
 EXPOSE 80
+CMD php artisan config:clear \
+ && php artisan migrate --force \
+ && php artisan storage:link \
+ && apache2-foreground
 
 
