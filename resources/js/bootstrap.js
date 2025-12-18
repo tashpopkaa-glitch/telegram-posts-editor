@@ -1,15 +1,17 @@
 import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
 
-if (import.meta.env.VITE_PUSHER_APP_KEY) {
-    window.Pusher = Pusher;
+// Agar Pusher ishlatmayotgan bo‘lsangiz,
+// bu joy shunchaki disabled bo‘lib turadi
+window.Pusher = null;
 
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-        forceTLS: true
-    });
-} else {
-    console.warn('Pusher disabled: no VITE_PUSHER_APP_KEY');
-}
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    wsHost: import.meta.env.VITE_PUSHER_HOST || window.location.hostname,
+    wsPort: import.meta.env.VITE_PUSHER_PORT || 80,
+    wssPort: import.meta.env.VITE_PUSHER_PORT || 443,
+    forceTLS: true,
+    encrypted: true,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss'],
+});
